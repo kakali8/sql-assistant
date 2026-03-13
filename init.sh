@@ -36,12 +36,14 @@ echo "   ✅ 依赖已安装"
 # 2. 拉取 SQL 模板
 echo ""
 echo "2. 从 Metabase 拉取 SQL 模板..."
-if [ -z "$METABASE_USER" ] || [ -z "$METABASE_PASSWORD" ]; then
+if [ -z "$METABASE_USER" ]; then
     read -p "   Metabase 邮箱: " METABASE_USER
+fi
+if [ -z "$METABASE_PASSWORD" ]; then
     read -s -p "   Metabase 密码: " METABASE_PASSWORD
     echo ""
-    export METABASE_USER METABASE_PASSWORD
 fi
+export METABASE_USER METABASE_PASSWORD
 python3 fetch_sql_templates.py
 
 # 3. 补充业务元信息
@@ -53,9 +55,13 @@ python3 enrich_sql_templates.py
 if [ ! -f ".mcp.json" ]; then
     echo ""
     echo "4. 配置 ClickHouse MCP 连接..."
-    read -p "   ClickHouse 用户名: " CH_USER
-    read -s -p "   ClickHouse 密码: " CH_PASSWORD
-    echo ""
+    if [ -z "$CH_USER" ]; then
+        read -p "   ClickHouse 用户名: " CH_USER
+    fi
+    if [ -z "$CH_PASSWORD" ]; then
+        read -s -p "   ClickHouse 密码: " CH_PASSWORD
+        echo ""
+    fi
     cat > .mcp.json << EOF
 {
   "mcpServers": {
