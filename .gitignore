@@ -1,0 +1,5 @@
+# MCP 配置（含个人 ClickHouse 凭证）
+.mcp.json
+
+# Claude Code 本地缓存
+.claude/

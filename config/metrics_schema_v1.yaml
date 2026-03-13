@@ -1,0 +1,4855 @@
+version: 1
+metrics:
+- metric_id: dau
+  metric_name: 日活跃用户数 (DAU)
+  level:
+  - 公司
+  owner:
+  - ceo
+  - marketing
+  business_domain: Platform Basics
+  role: Driver
+  definition: 当日去重活跃用户数
+  description: 表示用户规模是否健康
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - new_user
+  - retention(d1)
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注用户规模的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户增长
+    - 市场活动
+    drilldown_path:
+    - 按国家分析
+    - 按来源分析
+- metric_id: new_user
+  metric_name: 新用户数
+  level:
+  - 公司
+  owner:
+  - ceo
+  - marketing
+  business_domain: User Growth
+  role: Driver
+  definition: 新注册用户规模
+  description: 新用户数反映了平台在一定时间内新增注册用户的数量。
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - viral_new_uv
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户的增长趋势。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场推广活动
+    - 用户体验优化
+    drilldown_path:
+    - 按国家分析
+    - 按来源分析
+- metric_id: new_activated_user
+  metric_name: 有效新用户占比
+  level:
+  - 公司
+  - 部门
+  owner:
+  - marketing
+  - ceo
+  business_domain: User Growth
+  role: Driver
+  definition: 指标定义
+  description: T+1 进入有效对战的新用户比例
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.5
+  related_metrics:
+  - dau
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注增长质量
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: daily_income
+  metric_name: 总收入
+  level:
+  - 公司
+  owner:
+  - ceo
+  - ops
+  business_domain: Revenue
+  role: Driver
+  definition: 所有收入汇总
+  description: 所有收入汇总
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: currency
+  value_unit: usd
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注是否起量
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: retention(d1)
+  metric_name: 留存(D1)
+  level:
+  - 公司
+  owner:
+  - ceo
+  - product
+  business_domain: Platform Basics
+  role: Driver
+  definition: 新用户 D1 留存
+  description: 新用户 D1 留存
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.6
+  related_metrics:
+  - new_activated_user
+  - new_user_challenge_rate
+  - new_user_kix_challenge_retention
+  - new_user_enter_intro_rate
+  - new_user_intro_start_click_rate
+  - dnu_paly_rate_d0
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+  interpretation:
+    summary_hint:
+    - 关注产品成立
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: retention(d7)
+  metric_name: 留存(D7)
+  level:
+  - 公司
+  owner:
+  - ceo
+  - product
+  business_domain: Platform Basics
+  role: Driver
+  definition: 新用户 D7 留存
+  description: 新用户 D7 留存
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+  interpretation:
+    summary_hint:
+    - 关注产品成立
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: pk_successful_matching
+  metric_name: 匹配成功率
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: PK
+  role: Driver
+  definition: 成功进入对战的匹配比例
+  description: 成功进入对战的匹配比例
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.8
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - mode
+        - game_id
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - mode
+        - game_id
+  interpretation:
+    summary_hint:
+    - 关注能否开始
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: average_meaningful_battles_per_user
+  metric_name: 人均成功 PK 次数（活跃用户）
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Platform Basics
+  role: Driver
+  definition: 活跃用户在统计周期内，平均成功完成的 PK 场次
+  description: 活跃用户在统计周期内，平均成功完成的 PK 场次
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: battles
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - pk_successful_matching
+  - pk_click_to_enter
+  - pk_enter_to_ready
+  - pk_ready_to_start
+  - pk_start_to_finish
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注是否愿意连续参与对战
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 活跃用户参与度
+    - 游戏设计吸引力
+    drilldown_path:
+    - 用户行为分析
+    - 时间段对比
+- metric_id: average_ping_response
+  metric_name: MTR / API PING P90
+  level:
+  - 部门
+  owner:
+  - backend
+  business_domain: Monitoring
+  role: Driver
+  definition: 网络链路延迟
+  description: 指标描述
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: false
+    decimals: 0
+  if_error: true
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+        - platform
+        - platform+country
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+        - platform
+        - platform+country
+        agg: avg
+  interpretation:
+    summary_hint:
+    - 关注网络风险
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: participate_kix_challenge_uv
+  metric_name: 赛事参赛人数趋势
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 实际参赛用户数
+  description: 赛事参赛人数趋势
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - new_user_challenge_rate
+  - book_kix_challenge_uv
+  - from_waiting_to_start_match
+  - finish_kix_challenge_rate
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注是否有人玩
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: book_kix_challenge_uv
+  metric_name: 赛事预约率
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 预约用户 / DAU
+  description: 赛事预约率是指在日活跃用户中进行赛事预约的用户比例。
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.5
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注赛事预约率的变化趋势。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 市场推广活动
+    drilldown_path:
+    - 按产品线
+    - 按地区
+- metric_id: from_waiting_to_start_match
+  metric_name: 赛事开玩率
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 进入候场后，最终成功开始比赛的用户 / 次数占比
+  description: 赛事开玩率是指在候场后，成功开始比赛的用户与总次数的比例，反映候场体验的流畅性。
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.4
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注候场体验是否阻塞对战
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 系统稳定性
+    drilldown_path:
+    - 用户来源
+    - 时间段
+- metric_id: finish_kix_challenge_rate
+  metric_name: 赛事完成率
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 完成结算人数 / 开赛人数
+  description: 赛事完成率是指完成结算人数与开赛人数的比率，反映赛事的参与情况。
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.8
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注赛事的完成率变化。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 赛事的宣传力度
+    - 参与者的积极性
+    drilldown_path:
+    - 按部门分析
+    - 按时间段分析
+- metric_id: kix_train_times
+  metric_name: 赛前人均游玩次数
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 开赛前24h比赛游戏游玩人均次数
+  description: 赛前人均游玩次数的指标
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: players
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - median_game_seconds
+  - score_zero_user
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - game_id
+        - game_name
+        - mode
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - game_id
+        - game_name
+        - mode
+  interpretation:
+    summary_hint:
+    - 关注人均游玩趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 游戏类型
+    - 模式
+    drilldown_path:
+    - 游戏ID
+    - 游戏名称
+    - 模式
+- metric_id: kix_reward_uv
+  metric_name: KiX challenge奖励人数
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challenge奖励人数
+  description: 每日KiX challenge奖励人数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注奖励人数的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 运营活动
+    - 市场推广
+    drilldown_path:
+    - 按部门
+    - 按时间
+- metric_id: kix_challenge_reward_usd
+  metric_name: KiX challenge奖励金额
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challenge奖励金额
+  description: 每日KiX challenge奖励金额
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: currency
+  value_unit: usd
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注奖励金额的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 运营活动
+    - 市场推广
+    drilldown_path:
+    - 按部门分析
+    - 按时间分析
+- metric_id: kix_challenge_redeem_uv
+  metric_name: KiX challenge redeem人数
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challenge兑奖人数
+  description: 每日KiX challenge兑奖人数
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim:
+        - game_id
+        - game_name
+        - redeem_type
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - game_id
+        - game_name
+        - redeem_type
+  interpretation:
+    summary_hint:
+    - 关注兑奖人数的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 游戏类型
+    - 兑奖类型
+    drilldown_path:
+    - 按游戏分析
+    - 按兑奖类型分析
+- metric_id: kix_challenge_reward_value
+  metric_name: KiX challleng兑换金额
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challeng兑奖金额
+  description: 兑奖金额
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: currency
+  value_unit: usd
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim:
+        - game_id
+        - game_name
+        - redeem_type
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - game_id
+        - game_name
+        - redeem_type
+  interpretation:
+    summary_hint:
+    - 关注兑奖金额的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 游戏类型
+    - 兑换类型
+    drilldown_path:
+    - 按游戏分析
+    - 按兑换类型分析
+- metric_id: median_game_seconds
+  metric_name: Challenge游戏时长中位数
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challeng游戏时长
+  description: 每日KiX challeng游戏时长
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - game_name
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - game_name
+  interpretation:
+    summary_hint:
+    - 关注游戏时长
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 游戏类型
+    - 用户活跃度
+    drilldown_path:
+    - 游戏名称
+- metric_id: score_zero_user
+  metric_name: 零分用户占比
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每日KiX challeng游戏分数
+  description: 零分占比
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.2
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注零分用户的占比变化
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 用户参与度
+    - 游戏难度
+    drilldown_path:
+    - 用户来源
+    - 游戏版本
+- metric_id: kix_challenge_retention
+  metric_name: KiX challenge赛事留存
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 每天参赛用户隔日是否继续参赛
+  description: 留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 按产品分析
+    - 按运营活动分析
+- metric_id: invitation_impression_to_click
+  metric_name: 邀请曝光 → 点击漏斗
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: Viral
+  role: Driver
+  definition: 邀请/分享展示 → 点击
+  description: 用户是否愿意尝试分享
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注用户是否愿意尝试分享
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: click_to_invite_sucess
+  metric_name: 点击->邀请成功漏斗
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: Viral
+  role: Driver
+  definition: 指标定义
+  description: 点击->邀请成功
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: false
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: true
+        dim:
+        - source
+  interpretation:
+    summary_hint:
+    - 关注分享是否有吸引力
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: minisite_invitation_impression_to_click
+  metric_name: Minisite 邀请曝光 → 点击漏斗
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  business_domain: Viral
+  role: Driver
+  definition: Minisite邀请/分享展示 → 点击
+  description: Minisite邀请/分享展示与点击之间的转化情况
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注Minisite分享点击情况
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 分享次数
+    - 曝光量
+    drilldown_path:
+    - 渠道
+    - 时间
+- metric_id: minisite_click_to_invite_sucess
+  metric_name: Minisite点击->邀请成功漏斗
+  level:
+  - 部门
+  owner:
+  - ops
+  - marketing
+  - product
+  business_domain: Viral
+  role: Driver
+  definition: Minisite点击->邀请成功
+  description: Minisite点击->邀请成功
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注Minisite分享是否有吸引力
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: viral_new_uv
+  metric_name: Viral 占比
+  level:
+  - 公司
+  - 部门
+  owner:
+  - ops
+  - marketing
+  - product
+  - ceo
+  business_domain: Viral
+  role: Driver
+  definition: Viral 新增 / 总新增
+  description: Viral 新增用户占总新增用户的比例
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - invitation_impression_to_click
+  - click_to_invite_sucess
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注是否出现自增长
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户增长
+    - 市场推广
+    drilldown_path:
+    - 运营分析
+    - 市场分析
+- metric_id: viral_d1_rate
+  metric_name: viral来源用户的留存
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: Viral
+  role: Driver
+  definition: 指标定义
+  description: viral来源用户的留存
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注viral用户质量
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: viral_reward_uv
+  metric_name: viral奖励用户数
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  - marketing
+  business_domain: Viral
+  role: Driver
+  definition: 指标定义
+  description: viral奖励用户数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: false
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注viral奖励用户
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: viral_reward_energy
+  metric_name: viral奖励能量
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  - marketing
+  business_domain: Viral
+  role: Driver
+  definition: 指标定义
+  description: viral奖励能量
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: players
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注viral奖励能量的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: prize_win_to_cash_out
+  metric_name: 获奖用户提现率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: cash out
+  role: Driver
+  definition: 每日获奖用户中选择提现的比例
+  description: 现金兑奖情况
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - kix_challenge_redeem_uv
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注现金兑奖情况
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: prize_cash_out_to_successful
+  metric_name: 提现成功率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: Cash Out
+  role: Driver
+  definition: 每日提现成功比例
+  description: 提现成功率是指在所有提现请求中成功提现的比例。
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.5
+  related_metrics:
+  - kix_challenge_redeem_uv
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注提现成功率的变化趋势。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 支付方式
+    - 用户行为
+    drilldown_path:
+    - 按支付方式
+    - 按时间
+- metric_id: cash_out_error
+  metric_name: 提现失败原因
+  level:
+  - 部门
+  owner:
+  - ops
+  business_domain: cash out
+  role: Driver
+  definition: 指标定义
+  description: Cash out失败原因
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: false
+    decimals: 0
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - payment_method
+        - type
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - payment_method
+        - type
+        agg: avg
+  interpretation:
+    summary_hint:
+    - 关注不同原因占比
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: pk_click_to_enter
+  metric_name: PK进入率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: PK
+  role: Driver
+  definition: PK 请求 → 成功进入
+  description: PK 请求成功进入的比例
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.9
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注进入率的变化
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户请求量
+    - 产品优化
+    drilldown_path:
+    - 运营分析
+    - 产品反馈
+- metric_id: pk_enter_to_ready
+  metric_name: PK准备率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: PK
+  role: Driver
+  definition: PK 成功进入 → 准备
+  description: '关注重点: 准备率'
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.9
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注准备率的变化
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: pk_ready_to_start
+  metric_name: PK成功开玩率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: PK
+  role: Driver
+  definition: PK 准备 → 成功开玩
+  description: '关注重点: 开玩率'
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.9
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注开玩率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 产品吸引力
+    drilldown_path:
+    - 运营策略
+    - 产品优化
+- metric_id: pk_start_to_finish
+  metric_name: PK完成率
+  level:
+  - 部门
+  owner:
+  - ops
+  - product
+  business_domain: PK
+  role: Driver
+  definition: PK 成功开玩 → 完成
+  description: 关注完成率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.9
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注完成率
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: ad_finish_times
+  metric_name: 看广告获得energy次数
+  level:
+  - 公司
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Revenue
+  role: Driver
+  definition: 每日从topup页面或者弹窗观看广告的总次数
+  description: 用户观看广告意愿
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: times
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: sum
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+  interpretation:
+    summary_hint:
+    - 关注用户观看广告意愿
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 广告展示频率
+    - 用户参与度
+    drilldown_path:
+    - source
+- metric_id: spend_energy_daily
+  metric_name: energy消耗个数
+  level:
+  - 公司
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Revenue
+  role: Driver
+  definition: 每日energy消耗个数
+  description: 每日energy消耗个数
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: players
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注energy消耗情况
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: push_notification_click_rate
+  metric_name: 推送点击率
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Engagement
+  role: Driver
+  definition: 指标定义
+  description: 每天推送点击情况
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - text_pool
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - text_pool
+  interpretation:
+    summary_hint:
+    - 关注点击率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 推送内容
+    - 用户活跃度
+    drilldown_path:
+    - 按文本池分析
+    - 按日期分析
+- metric_id: push_notification_to_challenge
+  metric_name: 从推送参与Challenge
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Engagement
+  role: Driver
+  definition: 每天点击推送后成功参与比赛的人数比例
+  description: 每天点击推送后成功参与比赛的人数比例
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - text_pool
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - text_pool
+  interpretation:
+    summary_hint:
+    - 关注成功率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 推送内容的吸引力
+    - 用户参与度
+    drilldown_path:
+    - 按文本池分析
+    - 按时间分析
+- metric_id: viral__popup_show_click_rate
+  metric_name: viral弹窗展示->点击漏斗
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Viral
+  role: Driver
+  definition: 展示->点击
+  description: 弹窗是否有吸引力
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: funnel
+      dim_control:
+        enabled: true
+        dim:
+        - source
+  interpretation:
+    summary_hint:
+    - 关注弹窗的吸引力
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户兴趣
+    - 弹窗设计
+    drilldown_path:
+    - source
+- metric_id: average_energy_spend_per_active_user
+  metric_name: 人均energy消耗量
+  level:
+  - 部门
+  owner:
+  - product
+  - ops
+  business_domain: Revenue
+  role: Driver
+  definition: 平均每日人均energy消耗
+  description: 平均每日人均energy消耗
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: usd
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics:
+  - kix_train_times
+  - new_user_avg_spend_energy
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注消耗量
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 产品优化
+    - 用户活跃度
+    drilldown_path:
+    - 时间
+    - 部门
+- metric_id: network_error
+  metric_name: 网络报错次数
+  level:
+  - 部门
+  owner:
+  - backend
+  - server
+  business_domain: Monitoring
+  role: Driver
+  definition: 网络报错次数
+  description: 网络报错次数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: false
+    decimals: 0
+  if_error: true
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - platform
+        - error_type
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+        - error_type
+  interpretation:
+    summary_hint:
+    - 关注报错次数的变化趋势
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 网络稳定性
+    - 服务器负载
+    drilldown_path:
+    - 平台
+    - 错误类型
+- metric_id: network_error_uv_rate
+  metric_name: 网络报错用户比例
+  level:
+  - 部门
+  owner:
+  - backend
+  - server
+  business_domain: Monitoring
+  role: Driver
+  definition: 遇到错误的活跃用户比例
+  description: 遇到错误的活跃用户比例
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: true
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - platform
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注用户比例
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 平台差异
+    - 用户行为
+    drilldown_path:
+    - 平台
+    - 时间
+- metric_id: dnu_paly_rate_d0
+  metric_name: 新用户进来第一天玩游戏率
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: PK
+  role: Driver
+  definition: 新用户进来第一天玩游戏率
+  description: 新用户进来第一天玩游戏率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注玩游戏转化率
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 新用户体验
+    - 游戏内容吸引力
+    drilldown_path:
+    - 用户来源
+    - 用户行为
+- metric_id: dnu_avg_play_minute_d0
+  metric_name: 新用户第一天平均玩游戏时长
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: PK
+  role: Driver
+  definition: 新用户第一天平均玩游戏时长
+  description: 新用户第一天平均玩游戏时长
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注游戏时长
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户活跃度
+    - 游戏内容吸引力
+    drilldown_path:
+    - 用户来源
+    - 游戏类型
+- metric_id: dau_avg_paly_time_minute
+  metric_name: 平台所有用户平均玩游戏时长
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: PK
+  role: Driver
+  definition: 指标定义
+  description: 平台所有用户平均玩游戏时长
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: minutes
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注游戏时长
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: dau_play_rate
+  metric_name: dau中玩游戏的比例
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: PK
+  role: Driver
+  definition: dau中玩游戏的比例
+  description: dau中玩游戏的比例
+  is_core_metric: false
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: false
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注玩游戏转化率
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: game_loading_seconds_(p90)
+  metric_name: 游戏加载时长(P90)
+  level:
+  - 部门
+  owner:
+  - server
+  business_domain: Monitoring
+  role: Driver
+  definition: 游戏加载时长
+  description: 游戏加载时长(P90)指标用于衡量游戏在不同平台上的加载性能。
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 10.0
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - platform
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注游戏加载性能的变化趋势。
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 平台差异
+    - 网络状况
+    drilldown_path:
+    - 按平台
+    - 按时间
+- metric_id: game_loading_seconds_by_country_(p90)
+  metric_name: 不同国家游戏加载时长(P90)
+  level:
+  - 部门
+  owner:
+  - server
+  business_domain: Monitoring
+  role: Driver
+  definition: 游戏加载时长
+  description: 游戏加载时长
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - country
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注游戏加载时长的变化趋势
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 网络延迟
+    - 服务器性能
+    - 客户端优化
+    drilldown_path:
+    - 国家
+    - 日期
+- metric_id: new_user_challenge_rate
+  metric_name: 新用户KiX Challenge参与率
+  level:
+  - 部门
+  owner:
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 新用户第一天Challenge参与率
+  description: 新用户第一天Challenge参与率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.6
+  related_metrics:
+  - new_user_kix_challenge_book_rate
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注参与率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户来源
+    - 市场活动
+    drilldown_path:
+    - 按国家分析
+    - 按来源分析
+- metric_id: new_user_kix_challenge_book_rate
+  metric_name: 新用户KiX Challenge预约率
+  level:
+  - 部门
+  owner:
+  - marketing
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 指标定义
+  description: 新用户KiX Challenge预约率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.5
+  related_metrics:
+  - retention(d1)
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注预约率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户来源
+    - 市场活动
+    drilldown_path:
+    - 按国家分析
+    - 按来源分析
+- metric_id: new_user_kix_challenge_retention
+  metric_name: 新用户KiX challenge赛事留存
+  level:
+  - 部门
+  owner:
+  - marketing
+  business_domain: Daily Challenge
+  role: NorthStar
+  definition: 新用户参赛隔日是留存
+  description: 新用户参赛隔日的留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 市场推广效果
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: new_user_enter_intro_rate
+  metric_name: 新用户进入介绍页漏斗
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  business_domain: User Growth
+  role: Driver
+  definition: 新用户进入介绍页率
+  description: 新用户进入介绍页率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.8
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注用户进入kix chalenge前是否受阻
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: new_user_intro_start_click_rate
+  metric_name: 新用户从介绍页->点击start按钮漏斗
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  business_domain: User Growth
+  role: Driver
+  definition: 指标定义
+  description: 新用户点击start按钮率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_7_days
+  data_granularity: daily
+  analysis_perspective: value
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.8
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 7
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: value_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注用户进入kix chalenge前是否受阻
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: new_user_consume_energy_rate
+  metric_name: 消耗energy新用户占新用户率
+  level:
+  - 部门
+  owner:
+  - marketing
+  - ops
+  business_domain: User Growth
+  role: Driver
+  definition: 新用户消耗energy率
+  description: 新用户消耗energy率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户消耗energy率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场活动
+    - 用户获取渠道
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: new_user_avg_spend_energy
+  metric_name: 新用户人均消耗energy量
+  level:
+  - 部门
+  owner:
+  - marketing
+  - ops
+  business_domain: User Growth
+  role: Driver
+  definition: 指标定义
+  description: 新用户人均消耗energy量
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: ms
+  format:
+    humanize: false
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+      agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户的能量消耗趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户获取渠道
+    - 市场活动
+    drilldown_path:
+    - 按国家分析
+    - 按来源分析
+- metric_id: swipe_failed_user
+  metric_name: 用户swipe失败率
+  level:
+  - 部门
+  owner:
+  - backend
+  - server
+  business_domain: Monitoring
+  role: Driver
+  definition: 每天活跃用户中滑动失败的比例
+  description: 用户swipe失败率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: true
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim:
+        - platform
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注失败率的变化趋势
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 平台差异
+    - 用户行为
+    drilldown_path:
+    - 平台
+    - 时间
+- metric_id: swipe_failed_times_(p50)
+  metric_name: 用户swipe失败次数中位数
+  level:
+  - 部门
+  owner:
+  - backend
+  - server
+  business_domain: Monitoring
+  role: Guardrail
+  definition: 每天活跃用户中滑动失败次数的中位数
+  description: 用户swipe失败次数中位数
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: times
+  format:
+    humanize: false
+    decimals: 0
+  if_error: true
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: lower_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim:
+        - platform
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注失败次数
+    - 'good_direction: lower_is_better'
+    common_drivers:
+    - 平台问题
+    - 用户操作
+    drilldown_path:
+    - 平台
+    - 日期
+- metric_id: new_user_average_train_times
+  metric_name: 新用户平均练习challenge游戏次数
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 指标定义
+  description: 平均各国用户练习次数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: players
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_14_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 14
+        dim:
+        - country
+        agg: avg
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注次数的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户活跃度
+    - 市场推广效果
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: ads_popup_rate
+  metric_name: 广告弹窗展示率
+  level:
+  - 部门
+  owner:
+  - ceo
+  - product
+  business_domain: Revenue
+  role: Driver
+  definition: 活跃用户中看到广告弹窗的比例
+  description: 广告弹窗展示率是指在活跃用户中，看到广告弹窗的用户比例。
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注广告弹窗的展示比例变化。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户活跃度
+    - 广告投放策略
+    drilldown_path:
+    - 按日期查看
+    - 按用户类型查看
+- metric_id: ads_popup_ctr
+  metric_name: 广告弹窗点击率
+  level:
+  - 部门
+  owner:
+  - ceo
+  - product
+  business_domain: Revenue
+  role: Driver
+  definition: 广告弹窗点击次数/展示次数
+  description: 广告弹窗点击率是指广告弹窗的点击次数与展示次数的比率。
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注广告弹窗的点击率变化。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 广告展示频率
+    - 用户兴趣
+    drilldown_path:
+    - 按日期查看
+    - 按广告类型查看
+- metric_id: tournament_uv
+  metric_name: 每日Tournament用户数
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  - ceo
+  business_domain: rush hour
+  role: NorthStar
+  definition: 每日Tournament参与人数
+  description: 每日Tournament参与人数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注用户参与Tournament情况
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: tournament_d1_retention
+  metric_name: Tournament留存
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  - ceo
+  business_domain: rush hour
+  role: Driver
+  definition: 每天Tournament用户隔日是否继续参赛
+  description: 留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: tournament_retention
+  metric_name: 参与Tournament用户次日留存
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  - ceo
+  business_domain: rush hour
+  role: NorthStar
+  definition: 每天Tournament用户隔日是否继续留存
+  description: 参与Tournament用户次日留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: tournament_reward_uv
+  metric_name: Tournament奖励人数
+  level:
+  - 部门
+  owner:
+  - marketing
+  - ops
+  - product
+  business_domain: rush hour
+  role: Driver
+  definition: 每天Tournament奖励人数
+  description: Tournament奖励人数的日常统计
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注奖励人数的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场活动
+    - 用户参与度
+    drilldown_path:
+    - 国家
+    - 日期
+- metric_id: tournament__reward_d1_retention
+  metric_name: Tournament奖励用户留存
+  level:
+  - 部门
+  owner:
+  - marketing
+  - ops
+  - product
+  - ceo
+  business_domain: rush hour
+  role: Driver
+  definition: 每天Tournament奖励用户隔日是否继续参赛
+  description: 留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场活动
+    - 用户体验
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: tournament_reward_energy
+  metric_name: Tournament奖励能量
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  business_domain: rush hour
+  role: Driver
+  definition: 每天Tournament奖励能量
+  description: 指标描述
+  is_core_metric: false
+  metric_nature: additive
+  value_kind: number
+  value_unit: players
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: display_only
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注奖励能量的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场活动
+    - 用户参与度
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: new_user_tournament_rate
+  metric_name: 新用户参与Tournamen率
+  level:
+  - 公司
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  - ceo
+  business_domain: rush hour
+  role: Driver
+  definition: 每日新用户Tournament参与率
+  description: 新用户参与率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: number
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: true
+      threshold: 0.8
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户参与率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 新用户来源
+    - 市场活动
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: new_user_tournament_d1_retention
+  metric_name: 新用户Tournament留存
+  level:
+  - 部门
+  owner:
+  - marketing
+  - product
+  - ops
+  - ceo
+  business_domain: rush hour
+  role: Driver
+  definition: 每天Tournament新用户隔日是否继续参赛
+  description: 留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 市场活动
+    - 用户体验
+    - 产品更新
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: normal_popup_click
+  metric_name: 普通商业化弹窗点击
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: Revenue
+  role: NorthStar
+  definition: 各类型普通商业化弹窗点击率
+  description: 各类型普通商业化弹窗点击率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - popup_type
+        - segment
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - popup_type
+        - segment
+  interpretation:
+    summary_hint:
+    - 关注点击率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 弹窗类型
+    - 用户细分
+    drilldown_path:
+    - 按弹窗类型
+    - 按用户细分
+- metric_id: normal_ad_popup_get_energy
+  metric_name: 普通广告弹窗energy获取
+  level:
+  - 部门
+  owner:
+  - product
+  business_domain: Revenue
+  role: NorthStar
+  definition: 普通弹窗中看广告获得energy的情况
+  description: 普通弹窗中看广告获得energy的情况
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: false
+    decimals: 2
+  if_error: true
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim: []
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim: []
+  interpretation:
+    summary_hint:
+    - 关注获取率
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: daily_tournament_uv
+  metric_name: 每日Daily Tournament用户数
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily tournament
+  role: NorthStar
+  definition: 每日Daily Tournament参与人数
+  description: 每日Daily Tournament参与人数
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: number
+  value_unit: users
+  format:
+    humanize: true
+    decimals: 0
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注用户参与Daily Tournament情况
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 因素1
+    - 因素2
+    drilldown_path:
+    - 路径1
+    - 路径2
+- metric_id: daily_tournament_d1_retention
+  metric_name: Daily Tournament留存
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily tournament
+  role: NorthStar
+  definition: 每天Daily Tournament用户隔日是否继续参赛
+  description: 留存率
+  is_core_metric: true
+  metric_nature: additive
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: daily_tournament_retention
+  metric_name: 参与Daily Tournament用户次日留存
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily tournament
+  role: NorthStar
+  definition: 每天Daily Tournament用户隔日是否继续留存
+  description: 留存率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - country
+  interpretation:
+    summary_hint:
+    - 关注留存率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 国家
+    - 时间
+- metric_id: new_user_daily_tournament_rate
+  metric_name: 新用户参与Daily Tournament率
+  level:
+  - 公司
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily tournament
+  role: NorthStar
+  definition: 每日新用户Daily Tournament参与率
+  description: 每日新用户Daily Tournament参与率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户参与率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 新用户获取渠道
+    - 市场活动效果
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: new_user_daily_tournament_d1_retention
+  metric_name: 新用户Daily Tournament留存
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily tournament
+  role: NorthStar
+  definition: 每天Daily Tournament新用户隔日是否继续参赛
+  description: 关注新用户在Daily Tournament中的留存情况
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: percent
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - source
+        - country
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - source
+        - country
+  interpretation:
+    summary_hint:
+    - 关注新用户留存率的变化
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户参与度
+    - 活动吸引力
+    drilldown_path:
+    - 按来源分析
+    - 按国家分析
+- metric_id: auto_reminder_show
+  metric_name: 参赛提醒卡片展示率
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: Driver
+  definition: 展示用户/book用户
+  description: 展示率
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - platform
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注展示率的变化趋势
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 平台类型
+    drilldown_path:
+    - 按平台查看
+- metric_id: auto_reminder_click
+  metric_name: 参赛提醒卡片点击率
+  level:
+  - 部门
+  owner:
+  - ceo
+  - marketing
+  - product
+  - ops
+  business_domain: Daily Challenge
+  role: NorthStar
+  definition: 点击用户/展示用户
+  description: 点击用户与展示用户的比例，反映参赛提醒卡片的点击率。
+  is_core_metric: true
+  metric_nature: ratio
+  value_kind: ratio
+  value_unit: percent
+  format:
+    humanize: true
+    decimals: 2
+  if_error: false
+  time_range: last_30_days
+  data_granularity: daily
+  analysis_perspective: series
+  evaluation:
+    method: higher_is_better
+  anomaly_detection:
+    change_anomaly:
+      enabled: true
+    status_anomaly:
+      enabled: false
+  related_metrics: []
+  compute_plan:
+    series:
+      enabled: true
+      items:
+      - id: series_daily
+        series_days: 30
+        dim:
+        - platform
+    topk:
+      enabled: false
+    share:
+      enabled: false
+  viz:
+    items:
+    - id: series_daily
+      style: default
+      dim_control:
+        enabled: true
+        dim:
+        - platform
+  interpretation:
+    summary_hint:
+    - 关注参赛提醒卡片的点击率变化。
+    - 'good_direction: higher_is_better'
+    common_drivers:
+    - 用户活跃度
+    - 展示频率
+    drilldown_path:
+    - 平台
+    - 时间
+- metric_id: high_balance_user
+  metric_name: 高余额用户
+  level:
+  - 公司
+  owner:
+  - ceo
+  - ops
+  business_domain: Revenue
+  role: Driver
+  definition: 高能量余额用户列表
+  description: 高能量余额用户列表
+  is_core_metric: true
+  metric_nature: snapshot
+  value_kind: number
+  analysis_perspective: table
+  table_columns:
+  - uid
+  - name
+  - energy_balance
+  evaluation:
+    method: display_only
+  compute_plan: {}
+  viz:
+    items:
+    - id: table_view
+      style: table
