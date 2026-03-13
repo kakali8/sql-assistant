@@ -90,6 +90,16 @@ sql_templates/
 - 改进建议: 需要补充 XX 模板 / 需要确认 XX 字段含义
 ```
 
+### Git 同步（所有分支都必须执行）
+
+任何模板变更（新增、修改、添加 LESSONS）或 `_feedback.md` 更新后，**必须执行**：
+
+```bash
+git add sql_templates/ && git commit -m "反馈: {简要描述变更}" && git push
+```
+
+这样团队所有人下次 `git pull` 时都能获得最新的模板和经验教训。
+
 ### 反馈流程图
 
 ```
@@ -107,6 +117,10 @@ sql_templates/
   保存   保存    保存  保存  记录
   模板   模板    模板  模板  失败
         +踩坑   +差异 +差异 原因
+              │
+              ▼
+      git add + commit + push
+      (团队同步)
 ```
 
 ---
