@@ -16,8 +16,8 @@ import requests
 from requests.exceptions import ConnectionError, HTTPError, ReadTimeout, RequestException
 
 BASE_URL = os.environ.get("METABASE_URL", "https://meta.lobah.net")
-USERNAME = os.environ.get("METABASE_USER", "lijie@mozat.com")
-PASSWORD = os.environ.get("METABASE_PASSWORD", "Mozat@2026")
+USERNAME = os.environ.get("METABASE_USER", "")
+PASSWORD = os.environ.get("METABASE_PASSWORD", "")
 
 DASHBOARD_IDS = [518, 522]
 
@@ -127,6 +127,11 @@ def get_card_sql(session: requests.Session, card_id: int) -> Optional[Dict]:
 
 def main():
     print(f"🐍 Python: {sys.version.split()[0]}")
+
+    if not USERNAME or not PASSWORD:
+        print("❌ 请设置 METABASE_USER 和 METABASE_PASSWORD 环境变量")
+        print("   示例: METABASE_USER=you@company.com METABASE_PASSWORD=xxx python3 fetch_sql_templates.py")
+        sys.exit(1)
 
     session = requests.Session()
 
